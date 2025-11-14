@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Trusty Yellow Cabs - Invoice Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">
+          <img src="images/logo.png" alt="Trusty Yellow Cabs Logo">
+        </div>
+        <div class="title">Trusty Yellow Cabs</div>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="form" role="tab" aria-selected="true">Enter Trip Details</button>
+      <button class="tab" data-tab="preview" role="tab" aria-selected="false">Invoice Preview</button>
+    </nav>
+
+    <main class="content">
+      <section id="form" class="panel active">
+        <form id="invoiceForm" class="formcard">
+          <h2>Trip Details</h2>
+<div class="split">
+  <label>Invoice Date
+    <input type="date" name="invoiceDate" required>
+  </label>
+
+  <label>Trip Date (Optional)
+    <input type="date" name="tripDate">
+  </label>
+</div>
+
+          <label>Passenger Name
+            <input type="text" name="name" placeholder="Enter Passenger Name" required>
+          </label>
+
+          <label>Phone
+            <input type="text" name="phone" placeholder="Enter Phone Number">
+          </label>
+
+          <label>Pickup Location
+            <input type="text" name="pickup" placeholder="Enter Pickup Location" required>
+          </label>
+
+          <label>Drop Location
+            <input type="text" name="drop" placeholder="Enter Drop Location" required>
+          </label>
+
+          <label for="vehicleType">Vehicle Type</label>
+          <select id="vehicleType" name="vehicleType" onchange="updateVehicleRates()">
+            <option value="">Select Vehicle</option>
+            <option value="Mini">Mini</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Innova">Innova</option>
+            <option value="Tempo Traveller">Tempo Traveller</option>
+          </select>
+
+          <div class="split">
+            <label>Kms
+              <input type="number" name="kms" placeholder="0.00" step="0.01" required>
+            </label>
+            <label>Rate per km
+              <input type="number" id="rateInput" name="rate" placeholder="25" step="0.01" required>
+            </label>
+          </div>
+
+          <div class="split">
+            <label>Base Fare
+              <input type="number" id="baseFareInput" name="baseFare" placeholder="80" step="0.01">
+            </label>
+            <label>Waiting Time Fare
+              <input type="number" name="waiting" placeholder="0" step="0.01">
+            </label>
+          </div>
+
+          <div class="split">
+            <label>Toll & Parking
+              <input type="number" name="toll" placeholder="0" step="0.01">
+            </label>
+            <label>Driver Beta
+              <input type="number" name="driver" placeholder="0" step="0.01">
+            </label>
+          </div>
+
+          <div class="row">
+            <label>Peak Time Surcharge
+              <input type="number" step="0.01" name="peak" value="0">
+            </label>
+            <label>Advance Paid
+              <input type="number" step="0.01" name="advance" value="0">
+            </label>
+          </div>
+
+
+          
+        <div class="row">
+  <label>Driver Name
+    <input type="text" name="driverName" />
+  </label>
+</div>
+
+<div class="row">
+  <label>Vehicle Number
+    <input type="text" name="vehicleNumber" />
+  </label>
+</div>
+
+
+          <div class="form-actions">
+            <button type="submit" class="primary">Preview Invoice</button>
+            <button type="reset">Reset</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="preview" class="panel">
+        <div class="previewcard" id="previewCard">
+          <p class="helper">Preview will appear here after filling the form and clicking <strong>Preview Invoice</strong>.</p>
+        </div>
+      </section>
+    </main>
+
+   <div class="actions">
+
+ <button id="downloadPdfBtn" class="cta">
+  <span class="label">Download PDF</span>
+  <svg width="15" height="10" viewBox="0 0 13 10">
+    <path d="M1 5h11M8 1l4 4-4 4" />
+  </svg>
+</button>
+
+<button id="printBtn" class="cta">
+  <span class="label">Print</span>
+  <svg width="15" height="10" viewBox="0 0 13 10">
+    <path d="M1 5h11M8 1l4 4-4 4" />
+  </svg>
+</button>
+
+
+</div>
+
+
+    <footer class="footer">Trusty Yellow Cabs · Vadavalli, Coimbatore</footer>
+  </div>
+
+  <!-- html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+
+  <!-- Vehicle Rate Logic -->
+  <script>
+    function updateVehicleRates() {
+      const type = document.getElementById('vehicleType').value;
+      const rateField = document.getElementById('rateInput');
+      const baseFareField = document.getElementById('baseFareInput');
+      let rate = 0, base = 0;
+
+      switch(type) {
+        case 'Mini': rate = 25; base = 80; break;
+        case 'Sedan': rate = 25; base = 80; break;
+        case 'SUV': rate = 19; base = 100; break;
+        case 'Innova': rate = 20; base = 120; break;
+        case 'Tempo Traveller': rate = 22; base = 150; break;
+        default: rate = 0; base = 0;
+      }
+
+      rateField.value = rate;
+      baseFareField.value = base;
+    }
+  </script>
+
+  <!-- PWA install logic (unchanged) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js').then(reg => console.log('SW registered.', reg));
+    }
+
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+      installBtn.style.display = 'none';
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('User response:', outcome);
+      deferredPrompt = null;
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installBtn.style.display = 'none';
+      console.log('App installed');
+    });
+  </script>
+
+  <button id="installBtn" style="position:fixed;right:16px;bottom:16px;padding:10px 14px;border-radius:8px;border:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);background:#ffcc00;color:#111;font-weight:600;z-index:9999;display:none;">
+    Install App
+  </button>
+</body>
+</html>
